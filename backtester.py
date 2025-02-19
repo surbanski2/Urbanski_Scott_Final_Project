@@ -6,7 +6,19 @@ class LabelDemo(EasyFrame):
     def __init__(self):
         """Sets up the window and the label."""
         EasyFrame.__init__(self)
-        self.addLabel(text="Hello world", row=0, column=0)
+        self.setTitle("Portfolio Backtester")
+        self.setResizable(False)
+        self.addLabel(text="Ticker:", row=0, column=0)
+        self.addTextField(text="", row=0, column=1)
+        self.addLabel(text="Quantity:", row=1, column=0)
+        self.addTextField(text="0", row=1, column=1)
+        self.addLabel(text="Date:", row=2, column=0)
+        self.addTextField(text="yyyy-mm-dd", row=2, column=1)
+        self.addButton(text="Buy Stock", row=3, column=0)
+        self.addButton(text="Sell Stock", row=3, column=1)
+        self.addLabel(text="Portfolio Value: $10,000", row=4, column=0)
+        self.addButton(text="Calculate Portfolio Value", row=4, column=1)
+        self.addTextArea(text="", row=0, column=2, rowspan=3, width=50)
 
 def main():
     """Instantiates and pops up the window."""
