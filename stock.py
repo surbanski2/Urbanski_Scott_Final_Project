@@ -1,5 +1,4 @@
 import pandas_datareader.data as pdrData
-import datetime as dt
 
 class Stock:
 
@@ -14,19 +13,21 @@ class Stock:
         return validTicker
         
 
-    
-
     def GetOpeningPrice(self, date):
         data =  pdrData.DataReader(name=self._ticker, data_source="stooq", start=date, end=date)
         return data.iloc[0]['Open']
     
     def GetClosingPrice(self, date):
-        data = pdrData.DataReader(name=self, data_source="stooq", start=date, end=date)
+        data = pdrData.DataReader(name=self._ticker, data_source="stooq", start=date, end=date)
+        return data.iloc[0]['Close']
+    
+    def GetQuote(self):
+        data = pdrData.DataReader(name=self._ticker, data_source="stooq")
         return data.iloc[0]['Close']
     
 
 
 
-testStock = Stock('PIK')
-print(testStock.ValidTicker())
+testStock = Stock('MGK')
+print(testStock.GetQuote())
 

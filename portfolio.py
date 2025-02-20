@@ -1,8 +1,11 @@
+from stock import Stock
+
+
 class Portfolio:
 
     def __init__(self, cash):
         self._cash = cash
-        self._stocks = {}
+        self._stocks = {'AAPL': 2, 'GOOG': 4}
 
     def AbleToBuy(self, quantity, price):
 
@@ -110,5 +113,17 @@ class Portfolio:
 
         self._stocks[ticker] = self._stocks[ticker] - quantity
 
+    def CalculatePortfolioValue(self):
+        portfolioValue = 0
+        portfolioValue = portfolioValue + self._cash
+        for ticker in self._stocks:
+            quantity = self._stocks[ticker]
+            stock = Stock(ticker)
+            portfolioValue = portfolioValue + (quantity*stock.GetQuote())
+        return portfolioValue
 
 
+
+
+testPortfolio = Portfolio(5000)
+print(testPortfolio.CalculatePortfolioValue())
