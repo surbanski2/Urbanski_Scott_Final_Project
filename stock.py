@@ -1,4 +1,4 @@
-import pandas_datareader as pd
+import pandas_datareader.data as pdrData
 
 class Stock:
 
@@ -6,15 +6,11 @@ class Stock:
         self._ticker = ticker
         self._price = 0.0
 
-    def GetOpeningPrice(self):
-        self._price = pd.get_data_yahoo(self._ticker)
+    def GetOpeningPrice(self, date):
+        return pdrData.DataReader(name=self._ticker, data_source="stooq", start=date, end=date)
 
-    def GetClosingPrice(self):
-        self._price = pd.get_data_yahoo()
 
-def main():
-    testStock = Stock('MGK')
-    print(testStock.GetOpeningPrice())
 
-if __name__ == "__main__":
-    main()
+testStock = Stock('MGK')
+print(testStock.GetOpeningPrice('2025-02-18'))
+
