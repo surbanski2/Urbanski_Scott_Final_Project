@@ -11,8 +11,14 @@ class Stock:
         if data.empty:
             validTicker = False
         return validTicker
+    
+    def MarketOpen(self, date):
+        marketOpen = True
+        data = pdrData.DataReader(name=self._ticker, data_source="stooq", start=date, end=date)
+        if data.empty:
+            marketOpen = False
+        return marketOpen
         
-
     def GetOpeningPrice(self, date):
         data =  pdrData.DataReader(name=self._ticker, data_source="stooq", start=date, end=date)
         return data.iloc[0]['Open']
@@ -24,6 +30,9 @@ class Stock:
     def GetQuote(self):
         data = pdrData.DataReader(name=self._ticker, data_source="stooq")
         return data.iloc[0]['Close']
+    
+myTest = Stock("MGK")
+print(myTest.MarketOpen("2025-03-23"))
     
 
 

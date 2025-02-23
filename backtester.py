@@ -25,14 +25,13 @@ class Backtester(EasyFrame):
         self.transactionList = self.addTextArea(text="", row=0, column=2, rowspan=3, width=50)
 
     def BuyStock(self):
-        """
+        
         userStock = Stock(self.tickerInput.getText())
         if userStock.ValidTicker() == True:
             if self.ValidQuantity() == True:
-                self.messageBox(title="Success", message="You have entered a valid quantity!")
-            else:
-                self.messageBox(title="Error", message="You have entered an invalid quantity")
-        """
+                if self.ValidDate() == True:
+                    print("hello this is a test")
+        
         self.ResetFields()
 
     def SellStock(self):
