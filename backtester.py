@@ -1,6 +1,7 @@
 from breezypythongui import EasyFrame
 from portfolio import Portfolio
 from stock import Stock
+from dateutil import parser
 
 class Backtester(EasyFrame):
     """Displays a greeting in a window."""
@@ -24,12 +25,16 @@ class Backtester(EasyFrame):
         self.transactionList = self.addTextArea(text="", row=0, column=2, rowspan=3, width=50)
 
     def BuyStock(self):
+        """
         userStock = Stock(self.tickerInput.getText())
         if userStock.ValidTicker() == True:
             if self.ValidQuantity() == True:
                 self.messageBox(title="Success", message="You have entered a valid quantity!")
             else:
                 self.messageBox(title="Error", message="You have entered an invalid quantity")
+        """
+        myTest = parser.parse(self.dateInput.getText())
+        print(myTest)
 
     def SellStock(self):
         pass
@@ -42,6 +47,14 @@ class Backtester(EasyFrame):
         except:
             validQuantity = False
         return validQuantity
+    
+    def ValidDate(self):
+        validDate = True
+        try:
+            parser.parse(self.dateInput.getText())
+        except:
+            validDate = False
+        return validDate
 
 def main():
     """Instantiates and pops up the window."""
