@@ -17,6 +17,7 @@ from portfolio import Portfolio
 from transaction import Transaction
 from stock import Stock
 from dateutil import parser
+from datetime import timedelta
 from datetime import date
 
 class Backtester(EasyFrame):
@@ -27,7 +28,7 @@ class Backtester(EasyFrame):
         EasyFrame.__init__(self)
         self.myPortfolio = Portfolio(10000)
         self.myTransactions = []
-        self.currentDate = date(1900, 1, 1)
+        self.currentDate = "2005-01-01"
         self.setTitle("Portfolio Backtester")
         self.setResizable(False)
         self.tickerLabel = self.addLabel(text="Ticker:", row=0, column=0)
@@ -85,6 +86,7 @@ class Backtester(EasyFrame):
         else:
             self.messageBox(title="Error", message="You have entered an invalid ticker!")
         # all the entry fields are reset to their original state
+        self.AcceptableDate()
         self.ResetFields()
 
         print(self.myPortfolio._stocks)
@@ -133,6 +135,7 @@ class Backtester(EasyFrame):
         else:
             self.messageBox(title="Error", message="You have entered an invalid ticker!")
         # all the entry fields are reset to their original state
+
         self.ResetFields()
 
     def ValidQuantity(self):
@@ -177,7 +180,10 @@ class Backtester(EasyFrame):
         return validDate
     
     def AcceptableDate(self):
-        pass
+        if parser.parse(self.currentDate) < parser.parse(self.dateInput.getText()):
+            print("You have entered a date that is after the current date")
+        else:
+            print("You have entered a date before the current date!")
     
     def CaclulatePortfolio(self):
         self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue() :,.2f}"
