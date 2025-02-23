@@ -28,6 +28,5 @@ class Stock:
 
 
 
-testStock = Stock('MGK')
-print(testStock.GetQuote())
+
 
