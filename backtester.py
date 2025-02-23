@@ -11,6 +11,7 @@ class Backtester(EasyFrame):
         """Sets up the window and the label."""
         EasyFrame.__init__(self)
         self.myPortfolio = Portfolio(10000)
+        self.myTransactions = []
         self.setTitle("Portfolio Backtester")
         self.setResizable(False)
         self.tickerLabel = self.addLabel(text="Ticker:", row=0, column=0)
@@ -34,8 +35,8 @@ class Backtester(EasyFrame):
                         if self.myPortfolio.AbleToBuy(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText())) == True:
                             self.myPortfolio.AddStock(userStock._ticker, float(self.quantityInput.getText()))
                             self.myPortfolio.DebitCash(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()))
-                            myTransaction = Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText())
-                            print(myTransaction.OutputString()) 
+                            self.myTransactions.append(Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText()))
+                            self.transactionList.appendText(self.myTransactions[-1].outputString() + "\n")
                         else:
                             self.messageBox(title="Error", message="You cannot afford to purchase the entered quantity!")
                     else:
@@ -70,6 +71,8 @@ class Backtester(EasyFrame):
         except:
             validDate = False
         return validDate
+    
+
     
     def ResetFields(self):
         self.tickerInput.setText("")
