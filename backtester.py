@@ -30,7 +30,11 @@ class Backtester(EasyFrame):
         if userStock.ValidTicker() == True:
             if self.ValidQuantity() == True:
                 if self.ValidDate() == True:
-                    print("hello this is a test")
+                    if userStock.MarketOpen(self.dateInput.getText()) == True:
+                        if self.myPortfolio.AbleToBuy(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText())) == True:
+                            print("Yay! You can afford it!")
+                        else:
+                            print("You're broke!")
         
         self.ResetFields()
 
