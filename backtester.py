@@ -24,10 +24,24 @@ class Backtester(EasyFrame):
         self.transactionList = self.addTextArea(text="", row=0, column=2, rowspan=3, width=50)
 
     def BuyStock(self):
-        pass
+        userStock = Stock(self.tickerInput.getText())
+        if userStock.ValidTicker() == True:
+            if self.ValidQuantity() == True:
+                self.messageBox(title="Success", message="You have entered a valid quantity!")
+            else:
+                self.messageBox(title="Error", message="You have entered an invalid quantity")
 
     def SellStock(self):
         pass
+
+    def ValidQuantity(self):
+        validQuantity = True
+        try:
+            if float(self.quantityInput.getText()) <= 0:
+                validQuantity = False
+        except:
+            validQuantity = False
+        return validQuantity
 
 def main():
     """Instantiates and pops up the window."""
