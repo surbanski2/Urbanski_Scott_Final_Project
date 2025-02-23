@@ -33,8 +33,7 @@ class Backtester(EasyFrame):
             else:
                 self.messageBox(title="Error", message="You have entered an invalid quantity")
         """
-        myTest = parser.parse(self.dateInput.getText())
-        print(myTest)
+        self.ResetFields()
 
     def SellStock(self):
         pass
@@ -55,6 +54,11 @@ class Backtester(EasyFrame):
         except:
             validDate = False
         return validDate
+    
+    def ResetFields(self):
+        self.tickerInput.setText("")
+        self.quantityInput.setText("0")
+        self.dateInput.setText("yyyy-mm-dd")
 
 def main():
     """Instantiates and pops up the window."""
