@@ -1,6 +1,6 @@
 """
 Author: Scott Urbanski
-File : backtester.py
+File: backtester.py
 Date Modified: 2025-02-23
 Description: This GUI application allows the user to enter
              a stock ticker, a quantity, and a date. The
@@ -17,6 +17,7 @@ from portfolio import Portfolio
 from transaction import Transaction
 from stock import Stock
 from dateutil import parser
+from datetime import date
 
 class Backtester(EasyFrame):
     """Displays a greeting in a window."""
@@ -26,6 +27,7 @@ class Backtester(EasyFrame):
         EasyFrame.__init__(self)
         self.myPortfolio = Portfolio(10000)
         self.myTransactions = []
+        self.currentDate = date(1900, 1, 1)
         self.setTitle("Portfolio Backtester")
         self.setResizable(False)
         self.tickerLabel = self.addLabel(text="Ticker:", row=0, column=0)
@@ -173,6 +175,9 @@ class Backtester(EasyFrame):
         except:
             validDate = False
         return validDate
+    
+    def AcceptableDate(self):
+        pass
     
     def CaclulatePortfolio(self):
         self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue() :,.2f}"
