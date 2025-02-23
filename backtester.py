@@ -37,7 +37,7 @@ class Backtester(EasyFrame):
         self.buyButton = self.addButton(text="Buy Stock", row=3, column=0, command=self.BuyStock)
         self.sellButton = self.addButton(text="Sell Stock", row=3, column=1, command=self.SellStock)
         self.portfolioLabel = self.addLabel(text=f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue() :,.2f}", row=4, column=0)
-        self.calculateButton = self.addButton(text="Calculate Portfolio Value", row=4, column=1)
+        self.calculateButton = self.addButton(text="Calculate Portfolio Value", row=4, column=1, command=self.CaclulatePortfolio)
         self.transactionList = self.addTextArea(text="", row=0, column=2, rowspan=3, width=50)
 
     def BuyStock(self): 
@@ -85,8 +85,53 @@ class Backtester(EasyFrame):
         # all the entry fields are reset to their original state
         self.ResetFields()
 
+        print(self.myPortfolio._stocks)
+        print(self.myPortfolio._cash)
+
     def SellStock(self):
-        pass
+        """
+        Attempts to sell stock based on the user's inputs
+
+        Arguments:
+        N/A
+
+        Returns:
+        N/A
+        """
+
+        # creates a stock object based on the user's ticker input
+        userStock = Stock(self.tickerInput.getText())
+        # tests if the user has entered a valid stock ticker
+        if userStock.ValidTicker() == True:
+            # tests if the user has entered a valid quantity
+            if self.ValidQuantity() == True:
+                # tests if the user has entered a valid date
+                if self.ValidDate() == True:
+                    # tests if the stock market was open on the date the user selected
+                    if userStock.MarketOpen(self.dateInput.getText()) == True:
+                        # tests if the user has the stock in the portfolio to sell
+                        if self.myPortfolio.AbleToSell(float(self.quantityInput.getText()), userStock._ticker) == True:
+                            # if the user can sell it, then the stock ticker and its quantity are removed from the portfolio
+                            self.myPortfolio.RemoveStock(userStock._ticker, float(self.quantityInput.getText()))
+                            # the appropriate amount of cash is added from the portfolio
+                            self.myPortfolio.CreditCash(float(self.quantityInput.getText()), userStock.GetClosingPrice(self.dateInput.getText()))
+                            # a transaction is added to the list of transactions
+                            self.myTransactions.append(Transaction(False, float(self.quantityInput.getText()), userStock._ticker,userStock.GetClosingPrice(self.dateInput.getText()), self.dateInput.getText()))
+                            # the most recent transaction is outputted to the text area to confirm the purchase was successful
+                            self.transactionList.appendText(self.myTransactions[-1].OutputString() + "\n")
+                        else:
+                            self.messageBox(title="Error", message="You do not have enough shares to sell!")
+                    else:
+                        self.messageBox(title="Error", message="The stock market was not open!")
+                else:
+                    self.messageBox(title="Error", message="You have entered an invalid date!")
+
+            else:
+                self.messageBox(title="Error", message="Quantity of shares must be positive!")
+        else:
+            self.messageBox(title="Error", message="You have entered an invalid ticker!")
+        # all the entry fields are reset to their original state
+        self.ResetFields()
 
     def ValidQuantity(self):
         """
@@ -129,7 +174,10 @@ class Backtester(EasyFrame):
             validDate = False
         return validDate
     
-
+    def CaclulatePortfolio(self):
+        self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue() :,.2f}"
+        print(self.myPortfolio._stocks)
+        print(self.myPortfolio._cash)
     
     def ResetFields(self):
         """
@@ -141,7 +189,7 @@ class Backtester(EasyFrame):
         Returns:
         N/A
         """
-        
+
         self.tickerInput.setText("")
         self.quantityInput.setText("0")
         self.dateInput.setText("yyyy-mm-dd")

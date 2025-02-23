@@ -31,8 +31,7 @@ class Stock:
         data = pdrData.DataReader(name=self._ticker, data_source="stooq")
         return data.iloc[0]['Close']
     
-myTest = Stock("MGK")
-print(myTest.MarketOpen("2025-03-23"))
+
     
 
 
