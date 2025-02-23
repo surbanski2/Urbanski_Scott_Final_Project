@@ -5,7 +5,7 @@ class Portfolio:
 
     def __init__(self, cash):
         self._cash = cash
-        self._stocks = {'AAPL': 2, 'GOOG': 4}
+        self._stocks = {}
 
     def AbleToBuy(self, quantity, price):
 
@@ -125,5 +125,3 @@ class Portfolio:
 
 
 
-testPortfolio = Portfolio(5000)
-print(testPortfolio.CalculatePortfolioValue())

@@ -1,5 +1,6 @@
 from breezypythongui import EasyFrame
 from portfolio import Portfolio
+from transaction import Transaction
 from stock import Stock
 from dateutil import parser
 
@@ -24,17 +25,29 @@ class Backtester(EasyFrame):
         self.calculateButton = self.addButton(text="Calculate Portfolio Value", row=4, column=1)
         self.transactionList = self.addTextArea(text="", row=0, column=2, rowspan=3, width=50)
 
-    def BuyStock(self):
-        
+    def BuyStock(self): 
         userStock = Stock(self.tickerInput.getText())
         if userStock.ValidTicker() == True:
             if self.ValidQuantity() == True:
                 if self.ValidDate() == True:
                     if userStock.MarketOpen(self.dateInput.getText()) == True:
                         if self.myPortfolio.AbleToBuy(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText())) == True:
-                            print("Yay! You can afford it!")
+                            self.myPortfolio.AddStock(userStock._ticker, float(self.quantityInput.getText()))
+                            self.myPortfolio.DebitCash(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()))
+                            myTransaction = Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText())
+                            print(myTransaction.OutputString()) 
                         else:
-                            print("You're broke!")
+                            self.messageBox(title="Error", message="You cannot afford to purchase the entered quantity!")
+                    else:
+                        self.messageBox(title="Error", message="The stock market was not open!")
+                else:
+                    self.messageBox(title="Error", message="You have entered an invalid date!")
+
+            else:
+                self.messageBox(title="Error", message="Quantity of shares must be positive!")
+        else:
+            self.messageBox(title="Error", message="You have entered an invalid ticker!")
+
         
         self.ResetFields()
 
