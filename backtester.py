@@ -17,8 +17,7 @@ from portfolio import Portfolio
 from transaction import Transaction
 from stock import Stock
 from dateutil import parser
-from datetime import timedelta
-from datetime import date
+import datetime
 
 class Backtester(EasyFrame):
     """Displays a greeting in a window."""
@@ -54,6 +53,9 @@ class Backtester(EasyFrame):
         N/A
         """
 
+
+
+        """
         # creates a stock object based on the user's ticker input
         userStock = Stock(self.tickerInput.getText())
         # tests if the user has entered a valid stock ticker
@@ -86,6 +88,8 @@ class Backtester(EasyFrame):
         else:
             self.messageBox(title="Error", message="You have entered an invalid ticker!")
         # all the entry fields are reset to their original state
+
+        """
         self.AcceptableDate()
         self.ResetFields()
 
@@ -184,6 +188,10 @@ class Backtester(EasyFrame):
             print("You have entered a date that is after the current date")
         else:
             print("You have entered a date before the current date!")
+        if parser.parse(self.dateInput.getText()) < datetime.datetime.now():
+            print("You have entered an acceptable date.")
+        else:
+            print("You have entered a date that is in the future!")
     
     def CaclulatePortfolio(self):
         self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue() :,.2f}"
