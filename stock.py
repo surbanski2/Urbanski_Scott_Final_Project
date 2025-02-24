@@ -24,7 +24,11 @@ class Stock:
         if firstDateString != date:
             raise MarketClosed
         return data.iloc[0]["Close"]
-        
+    
+    def GetQuote(self):
+        data = yfinance.Ticker(self._ticker).history()
+        dataLength = len(data) - 1
+        return data.iloc[dataLength]["Close"]
     
 class InvalidTicker(Exception):
     "Raised when a ticker is invalid"
@@ -33,6 +37,9 @@ class InvalidTicker(Exception):
 class MarketClosed(Exception):
     "Raised when the stock market is closed"
     pass
+
+testStock = Stock("MGK")
+print(testStock.GetQuote())
     
 
     

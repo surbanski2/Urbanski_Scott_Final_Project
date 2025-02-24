@@ -79,6 +79,16 @@ class Portfolio:
             portfolioValue = portfolioValue + (quantity*stock.GetClosingPrice(date=date))
         return portfolioValue
     
+    def CalculatePresentValue(self):
+        portfolioValue = 0
+        portfolioValue = portfolioValue + self._cash
+        for ticker in self._stocks:
+            quantity = self._stocks[ticker]
+            stock = Stock(ticker)
+            portfolioValue = portfolioValue + (quantity*stock.GetQuote())
+        return portfolioValue
+
+    
 class InsufficientFunds(Exception):
     """Raises an exception for insufficient funds"""
     pass

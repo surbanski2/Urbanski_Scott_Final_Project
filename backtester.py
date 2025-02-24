@@ -184,7 +184,7 @@ class Backtester(EasyFrame):
     
     def CaclulatePortfolio(self):
         todayDateObject = datetime.now()
-        self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue(todayDateObject.strftime("%Y-%m-%d")) :,.2f}"
+        self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePresentValue() :,.2f}"
         print(self.myPortfolio._stocks)
         print(self.myPortfolio._cash)
     
