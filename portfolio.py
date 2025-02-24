@@ -7,23 +7,6 @@ class Portfolio:
         self._cash = cash
         self._stocks = {}
 
-    def AbleToBuy(self, quantity, price):
-
-        """
-        Checks to see if the user can purchase the stock
-
-        Arguments:
-        quantity: the number of shares purchased
-        price: the purchase price
-
-        Returns:
-        ableToBuy: a Boolean value determining whether or not the user can afford the purchase
-        """
-        
-        ableToBuy = True
-        if quantity * price > self._cash:
-            ableToBuy = False
-        return ableToBuy
     
     def PurchaseStock(self, quantity, price, ticker):
 
@@ -39,13 +22,16 @@ class Portfolio:
         
         """
 
+        totalCost = quantity * price
+        if totalCost <= self._cash:
+            self._cash = self._cash - totalCost
+        else:
+            raise InsufficientFunds
+
         if ticker in self._stocks:
             self._stocks[ticker] = self._stocks[ticker] + quantity
         else:
             self._stocks[ticker] = quantity
-
-        totalCost = quantity * price
-        self._cash = self._cash - totalCost
 
     def AbleToSell(self, quantity, ticker):
 
@@ -92,6 +78,10 @@ class Portfolio:
             stock = Stock(ticker)
             portfolioValue = portfolioValue + (quantity*stock.GetQuote())
         return portfolioValue
+    
+class InsufficientFunds(Exception):
+    """Raises an exception for insufficient funds"""
+    pass
 
 
 

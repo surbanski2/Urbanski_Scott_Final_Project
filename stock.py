@@ -1,8 +1,4 @@
-import pandas_datareader.data as pdrData
 import yfinance
-import datetime
-
-
 
 class Stock:
 
@@ -11,24 +7,16 @@ class Stock:
         
     def GetOpeningPrice(self, date):
         data = yfinance.Ticker(self._ticker).history(start=date)
-        firstDate = data.index[0]
-        test = firstDate.strftime('%Y-%m-%d')
-        if test == date:
-            print("Yay")
-        else:
-            print("fuck")
-
-        
-
-        
-        
-        
-        
- 
-        """
-        data = pdrData.DataReader(name=self._ticker, data_source="stooq")
         if data.empty:
             raise InvalidTicker
+        firstDate = data.index[0]
+        firstDateString = firstDate.strftime('%Y-%m-%d')
+        if firstDateString != date:
+            raise MarketClosed
+        return data.iloc[0]["Open"]
+        
+    """
+
     
     def GetClosingPrice(self, date):
         data = pdrData.DataReader(name=self._ticker, data_source="stooq", start=date, end=date)

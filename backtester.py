@@ -13,7 +13,7 @@ Description: This GUI application allows the user to enter
 """
 
 from breezypythongui import EasyFrame
-from portfolio import Portfolio
+import portfolio
 from transaction import Transaction
 import stock
 from dateutil import parser
@@ -25,7 +25,7 @@ class Backtester(EasyFrame):
     def __init__(self):
         """Sets up the window and the components."""
         EasyFrame.__init__(self)
-        self.myPortfolio = Portfolio(10000)
+        self.myPortfolio = portfolio.Portfolio(10000)
         self.myTransactions = []
         self.currentDate = "1900-01-01"
         self.setTitle("Portfolio Backtester")
@@ -64,29 +64,27 @@ class Backtester(EasyFrame):
                 if self.ValidDate() == True:
                     if self.AcceptableDate() == True:
                         # tests if the stock market was open on the date the user selected
-                            if self.myPortfolio.AbleToBuy(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText())) == True:
-                                # if the user can afford it, then the stock ticker and its quantity are added to the portfolio
-                                self.myPortfolio.PurchaseStock(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()), userStock._ticker)
-                                # a transaction is added to the list of transactions
-                                self.myTransactions.append(Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText()))
-                                # the most recent transaction is outputted to the text area to confirm the purchase was successful
-                                self.transactionList.appendText(self.myTransactions[-1].OutputString() + "\n")
-                                self.currentDate = self.dateInput.getText()
-                            else:
-                                self.messageBox(title="Error", message="You cannot afford to purchase the entered quantity!")
+                        self.myPortfolio.PurchaseStock(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()), userStock._ticker)
+                        # a transaction is added to the list of transactions
+                        self.myTransactions.append(Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText()))
+                        # the most recent transaction is outputted to the text area to confirm the purchase was successful
+                        self.transactionList.appendText(self.myTransactions[-1].OutputString() + "\n")
+                        self.currentDate = self.dateInput.getText()
                     else:
                         self.messageBox(title="Error", message="You must enter a date between the ranges.")
                 else:
                     self.messageBox(title="Error", message="You have entered an invalid date!")
-
             else:
                 self.messageBox(title="Error", message="Quantity of shares must be positive!")
         except stock.InvalidTicker:
             self.messageBox(title="Error", message="You have entered an invalid ticker!")
         except stock.MarketClosed:
             self.messageBox(title="Error", message="The stock market was closed!")
-        # all the entry fields are reset to their original state
-        self.ResetFields()
+        except portfolio.InsufficientFunds:
+            self.messageBox(title="Error", message="You do not have enough funds to purchase the desired quantity!")
+        finally:
+            # all the entry fields are reset to their original state
+            self.ResetFields()
 
         print(self.currentDate)
 
