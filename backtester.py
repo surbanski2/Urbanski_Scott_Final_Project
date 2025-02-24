@@ -116,9 +116,7 @@ class Backtester(EasyFrame):
                             # tests if the user has the stock in the portfolio to sell
                             if self.myPortfolio.AbleToSell(float(self.quantityInput.getText()), userStock._ticker) == True:
                                 # if the user can sell it, then the stock ticker and its quantity are removed from the portfolio
-                                self.myPortfolio.RemoveStock(userStock._ticker, float(self.quantityInput.getText()))
-                                 # the appropriate amount of cash is added from the portfolio
-                                self.myPortfolio.CreditCash(float(self.quantityInput.getText()), userStock.GetClosingPrice(self.dateInput.getText()))
+                                self.myPortfolio.SellStock(float(self.quantityInput.getText()), userStock.GetClosingPrice(self.dateInput.getText()), userStock._ticker)
                                 # a transaction is added to the list of transactions
                                 self.myTransactions.append(Transaction(False, float(self.quantityInput.getText()), userStock._ticker,userStock.GetClosingPrice(self.dateInput.getText()), self.dateInput.getText()))
                                 # the most recent transaction is outputted to the text area to confirm the purchase was successful

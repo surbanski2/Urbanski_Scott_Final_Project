@@ -66,7 +66,7 @@ class Portfolio:
                 ableToSell = True
         return ableToSell
 
-    def CreditCash(self, quantity, price):
+    def SellStock(self, quantity, price, ticker):
 
         """
         Adds cash to the portfolio
@@ -80,24 +80,9 @@ class Portfolio:
         
         """
 
+        self._stocks[ticker] = self._stocks[ticker] - quantity
         totalProceeds = quantity * price        
         self._cash = self._cash + totalProceeds
-
-    def RemoveStock(self, ticker, quantity):
-
-        """
-        Removes stock from the portfolio
-
-        Arguments:
-        ticker: the stock ticker
-        quantity: the number of shares purchased
-
-        Returns:
-        N/A
-        
-        """
-
-        self._stocks[ticker] = self._stocks[ticker] - quantity
 
     def CalculatePortfolioValue(self):
         portfolioValue = 0
