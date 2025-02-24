@@ -18,6 +18,7 @@ from transaction import Transaction
 import stock
 from dateutil import parser
 import datetime
+from datetime import datetime
 
 class Backtester(EasyFrame):
     """Displays a greeting in a window."""
@@ -182,7 +183,8 @@ class Backtester(EasyFrame):
         return acceptableDate
     
     def CaclulatePortfolio(self):
-        self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue() :,.2f}"
+        todayDateObject = datetime.now()
+        self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue(todayDateObject.strftime("%Y-%m-%d")) :,.2f}"
         print(self.myPortfolio._stocks)
         print(self.myPortfolio._cash)
     

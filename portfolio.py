@@ -70,13 +70,13 @@ class Portfolio:
         totalProceeds = quantity * price        
         self._cash = self._cash + totalProceeds
 
-    def CalculatePortfolioValue(self):
+    def CalculatePortfolioValue(self, date):
         portfolioValue = 0
         portfolioValue = portfolioValue + self._cash
         for ticker in self._stocks:
             quantity = self._stocks[ticker]
             stock = Stock(ticker)
-            portfolioValue = portfolioValue + (quantity*stock.GetQuote())
+            portfolioValue = portfolioValue + (quantity*stock.GetClosingPrice(date=date))
         return portfolioValue
     
 class InsufficientFunds(Exception):
