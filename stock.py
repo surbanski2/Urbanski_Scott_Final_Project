@@ -1,5 +1,7 @@
 import pandas_datareader.data as pdrData
-import pandas
+import yfinance
+import datetime
+
 
 
 class Stock:
@@ -8,14 +10,15 @@ class Stock:
         self._ticker = ticker
         
     def GetOpeningPrice(self, date):
-        try:
-            data = pandas.DataFrame(pdrData.DataReader(name=self._ticker, data_source="stooq", start=date))
-            theDate = data.index[-1]
-            test = pandas.Timestamp.date(theDate)
-            print(type(test))
-            print(test)
-        except: 
-            raise InvalidTicker
+        data = yfinance.Ticker(self._ticker).history(start=date)
+        firstDate = data.index[0]
+        test = firstDate.strftime('%Y-%m-%d')
+        if test == date:
+            print("Yay")
+        else:
+            print("fuck")
+
+        
 
         
         
