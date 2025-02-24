@@ -15,7 +15,7 @@ Description: This GUI application allows the user to enter
 from breezypythongui import EasyFrame
 from portfolio import Portfolio
 from transaction import Transaction
-from stock import Stock
+import stock
 from dateutil import parser
 import datetime
 
@@ -23,7 +23,7 @@ class Backtester(EasyFrame):
     """Displays a greeting in a window."""
 
     def __init__(self):
-        """Sets up the window and the label."""
+        """Sets up the window and the components."""
         EasyFrame.__init__(self)
         self.myPortfolio = Portfolio(10000)
         self.myTransactions = []
@@ -54,17 +54,16 @@ class Backtester(EasyFrame):
         """
 
         # creates a stock object based on the user's ticker input
-        userStock = Stock(self.tickerInput.getText())
+        userStock = stock.Stock(self.tickerInput.getText())
         # tests if the user has entered a valid stock ticker
-        if userStock.ValidTicker() == True:
-            # tests if the user has entered a valid quantity
+
+
+        try:
             if self.ValidQuantity() == True:
                 # tests if the user has entered a valid date
                 if self.ValidDate() == True:
                     if self.AcceptableDate() == True:
                         # tests if the stock market was open on the date the user selected
-                        if userStock.MarketOpen(self.dateInput.getText()) == True:
-                            # tests if the user can afford to purchase the stock he/she wants to purchase
                             if self.myPortfolio.AbleToBuy(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText())) == True:
                                 # if the user can afford it, then the stock ticker and its quantity are added to the portfolio
                                 self.myPortfolio.PurchaseStock(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()), userStock._ticker)
@@ -75,8 +74,6 @@ class Backtester(EasyFrame):
                                 self.currentDate = self.dateInput.getText()
                             else:
                                 self.messageBox(title="Error", message="You cannot afford to purchase the entered quantity!")
-                        else:
-                            self.messageBox(title="Error", message="The stock market was not open!")  
                     else:
                         self.messageBox(title="Error", message="You must enter a date between the ranges.")
                 else:
@@ -84,8 +81,10 @@ class Backtester(EasyFrame):
 
             else:
                 self.messageBox(title="Error", message="Quantity of shares must be positive!")
-        else:
+        except stock.InvalidTicker:
             self.messageBox(title="Error", message="You have entered an invalid ticker!")
+        except stock.MarketClosed:
+            self.messageBox(title="Error", message="The stock market was closed!")
         # all the entry fields are reset to their original state
         self.ResetFields()
 
@@ -103,7 +102,7 @@ class Backtester(EasyFrame):
         """
 
         # creates a stock object based on the user's ticker input
-        userStock = Stock(self.tickerInput.getText())
+        userStock = stock.Stock(self.tickerInput.getText())
         # tests if the user has entered a valid stock ticker
         if userStock.ValidTicker() == True:
             # tests if the user has entered a valid quantity
