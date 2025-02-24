@@ -59,23 +59,21 @@ class Backtester(EasyFrame):
 
 
         try:
-            if self.ValidQuantity() == True:
-                # tests if the user has entered a valid date
-                if self.ValidDate() == True:
-                    if self.AcceptableDate() == True:
-                        # tests if the stock market was open on the date the user selected
-                        self.myPortfolio.PurchaseStock(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()), userStock._ticker)
-                        # a transaction is added to the list of transactions
-                        self.myTransactions.append(Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText()))
-                        # the most recent transaction is outputted to the text area to confirm the purchase was successful
-                        self.transactionList.appendText(self.myTransactions[-1].OutputString() + "\n")
-                        self.currentDate = self.dateInput.getText()
-                    else:
-                        self.messageBox(title="Error", message="You must enter a date between the ranges.")
-                else:
-                    self.messageBox(title="Error", message="You have entered an invalid date!")
-            else:
+            if self.ValidQuantity() == False:
                 self.messageBox(title="Error", message="Quantity of shares must be positive!")
+            elif self.ValidDate() == False:
+                self.messageBox(title="Error", message="You have entered an invalid date!")
+            elif self.AcceptableDate() == False:
+                self.messageBox(title="Error", message="You must enter a date between the ranges.")
+            else:
+                self.myPortfolio.PurchaseStock(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()), userStock._ticker)
+                self.myTransactions.append(Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText()))
+                self.transactionList.appendText(self.myTransactions[-1].OutputString() + "\n")
+                self.currentDate = self.dateInput.getText()
+                # tests if the user has entered a valid date
+                        # tests if the stock market was open on the date the user selected
+                        # a transaction is added to the list of transactions
+                        # the most recent transaction is outputted to the text area to confirm the purchase was successful
         except stock.InvalidTicker:
             self.messageBox(title="Error", message="You have entered an invalid ticker!")
         except stock.MarketClosed:
@@ -86,7 +84,6 @@ class Backtester(EasyFrame):
             # all the entry fields are reset to their original state
             self.ResetFields()
 
-        print(self.currentDate)
 
     def SellStock(self):
         """
