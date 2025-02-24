@@ -25,7 +25,7 @@ class Portfolio:
             ableToBuy = False
         return ableToBuy
     
-    def DebitCash(self, quantity, price):
+    def PurchaseStock(self, quantity, price, ticker):
 
         """
         Removes cash from the portfolio
@@ -39,27 +39,13 @@ class Portfolio:
         
         """
 
-        totalCost = quantity * price
-        self._cash = self._cash - totalCost
-
-    def AddStock(self, ticker, quantity):
-
-        """
-        Adds stock to the portfolio
-
-        Arguments:
-        ticker: the stock ticker
-        quantity: the number of shares purchased
-
-        Returns:
-        N/A
-        
-        """
-
         if ticker in self._stocks:
             self._stocks[ticker] = self._stocks[ticker] + quantity
         else:
             self._stocks[ticker] = quantity
+
+        totalCost = quantity * price
+        self._cash = self._cash - totalCost
 
     def AbleToSell(self, quantity, ticker):
 

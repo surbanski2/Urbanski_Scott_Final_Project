@@ -67,9 +67,7 @@ class Backtester(EasyFrame):
                             # tests if the user can afford to purchase the stock he/she wants to purchase
                             if self.myPortfolio.AbleToBuy(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText())) == True:
                                 # if the user can afford it, then the stock ticker and its quantity are added to the portfolio
-                                self.myPortfolio.AddStock(userStock._ticker, float(self.quantityInput.getText()))
-                                # the appropriate amount of cash is removed from the portfolio
-                                self.myPortfolio.DebitCash(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()))
+                                self.myPortfolio.PurchaseStock(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()), userStock._ticker)
                                 # a transaction is added to the list of transactions
                                 self.myTransactions.append(Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText()))
                                 # the most recent transaction is outputted to the text area to confirm the purchase was successful
