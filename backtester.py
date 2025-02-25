@@ -17,8 +17,8 @@ import portfolio
 from transaction import Transaction
 import stock
 from dateutil import parser
-import datetime
 from datetime import datetime
+import pygal
 
 class Backtester(EasyFrame):
     """Displays a greeting in a window."""
@@ -28,6 +28,7 @@ class Backtester(EasyFrame):
         EasyFrame.__init__(self)
         self.myPortfolio = portfolio.Portfolio(10000)
         self.myTransactions = []
+        self.myPortfolioSnapshots = []
         self.currentDate = "1900-01-01"
         self.setTitle("Portfolio Backtester")
         self.setResizable(False)
@@ -42,6 +43,7 @@ class Backtester(EasyFrame):
         self.portfolioLabel = self.addLabel(text=f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue() :,.2f}", row=4, column=0)
         self.calculateButton = self.addButton(text="Calculate Portfolio Value", row=4, column=1, command=self.CaclulatePortfolio)
         self.transactionList = self.addTextArea(text="", row=0, column=2, rowspan=3, width=50)
+        self.graphButton = self.addButton(text="Visualize Portfolio", row=5, column=0, columnspan=2, command=self.VisuializePortfolio)
 
     def BuyStock(self): 
         """
@@ -70,6 +72,8 @@ class Backtester(EasyFrame):
                 self.myPortfolio.PurchaseStock(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()), userStock._ticker)
                 self.myTransactions.append(Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText()))
                 self.transactionList.appendText(self.myTransactions[-1].OutputString() + "\n")
+                self.myPortfolioSnapshots.append((parser.parse(self.dateInput.getText()),self.myPortfolio.CalculatePortfolioValue(date=self.dateInput.getText())))
+                print(self.myPortfolioSnapshots)
                 self.currentDate = self.dateInput.getText()
                 # tests if the user has entered a valid date
                         # tests if the stock market was open on the date the user selected
@@ -173,7 +177,7 @@ class Backtester(EasyFrame):
         acceptableDate = True
         if parser.parse(self.currentDate) > parser.parse(self.dateInput.getText()):
             acceptableDate = False
-        if parser.parse(self.dateInput.getText()) > datetime.datetime.now():
+        if parser.parse(self.dateInput.getText()) > datetime.now():
             acceptableDate = False
         return acceptableDate
     
@@ -196,6 +200,11 @@ class Backtester(EasyFrame):
         self.tickerInput.setText("")
         self.quantityInput.setText("0")
         self.dateInput.setText("yyyy-mm-dd")
+
+    def VisuializePortfolio(self):
+        chart = pygal.DateLine()
+        chart.add('Portfolio Value', [snapshot for snapshot in self.myPortfolioSnapshots])
+        chart.render_in_browser()
 
 def main():
     """Instantiates and pops up the window."""

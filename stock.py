@@ -15,6 +15,7 @@ class Stock:
     
     def GetClosingPrice(self, date):
         data = self.LookupQuote(date=date)
+        print(data)
         firstDate = data.index[0]
         firstDateString = firstDate.strftime('%Y-%m-%d')
         if firstDateString != date:
@@ -41,6 +42,9 @@ class MarketClosed(Exception):
     "Raised when the stock market is closed"
     pass
 
+
+myStockTest = Stock("MGK")
+print(myStockTest.GetClosingPrice("2022-02-02"))
 
     
 
