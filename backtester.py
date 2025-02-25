@@ -97,41 +97,36 @@ class Backtester(EasyFrame):
         N/A
         """
 
-        # creates a stock object based on the user's ticker input
+                # creates a stock object based on the user's ticker input
         userStock = stock.Stock(self.tickerInput.getText())
         # tests if the user has entered a valid stock ticker
-        if userStock.ValidTicker() == True:
-            # tests if the user has entered a valid quantity
-            if self.ValidQuantity() == True:
-                # tests if the user has entered a valid date
-                if self.ValidDate() == True:
-                    if self.AcceptableDate() == True:
-                         # tests if the stock market was open on the date the user selected
-                        if userStock.MarketOpen(self.dateInput.getText()) == True:
-                            # tests if the user has the stock in the portfolio to sell
-                            if self.myPortfolio.AbleToSell(float(self.quantityInput.getText()), userStock._ticker) == True:
-                                # if the user can sell it, then the stock ticker and its quantity are removed from the portfolio
-                                self.myPortfolio.SellStock(float(self.quantityInput.getText()), userStock.GetClosingPrice(self.dateInput.getText()), userStock._ticker)
-                                # a transaction is added to the list of transactions
-                                self.myTransactions.append(Transaction(False, float(self.quantityInput.getText()), userStock._ticker,userStock.GetClosingPrice(self.dateInput.getText()), self.dateInput.getText()))
-                                # the most recent transaction is outputted to the text area to confirm the purchase was successful
-                                self.transactionList.appendText(self.myTransactions[-1].OutputString() + "\n")
-                                self.currentDate = self.dateInput.getText()
-                            else:
-                                self.messageBox(title="Error", message="You do not have enough shares to sell!")
-                        else:
-                            self.messageBox(title="Error", message="The stock market was not open!")
-                    else:
-                        self.messageBox(title="Error", message="The date must be between the previous transaction date and the present day!")
-                else:
-                    self.messageBox(title="Error", message="You have entered an invalid date!")
-            else:
-                self.messageBox(title="Error", message="Quantity of shares must be positive!")
-        else:
-            self.messageBox(title="Error", message="You have entered an invalid ticker!")
-        # all the entry fields are reset to their original state
 
-        self.ResetFields()
+
+        try:
+            if self.ValidQuantity() == False:
+                self.messageBox(title="Error", message="Quantity of shares must be positive!")
+            elif self.ValidDate() == False:
+                self.messageBox(title="Error", message="You have entered an invalid date!")
+            elif self.AcceptableDate() == False:
+                self.messageBox(title="Error", message="You must enter a date between the ranges.")
+            else:
+                self.myPortfolio.SellStock(float(self.quantityInput.getText()), userStock.GetClosingPrice(date=self.dateInput.getText()), userStock._ticker)
+                self.myTransactions.append(Transaction(False, float(self.quantityInput.getText()), userStock._ticker,userStock.GetClosingPrice(date=self.dateInput.getText()), self.dateInput.getText()))
+                self.transactionList.appendText(self.myTransactions[-1].OutputString() + "\n")
+                self.currentDate = self.dateInput.getText()
+                # tests if the user has entered a valid date
+                        # tests if the stock market was open on the date the user selected
+                        # a transaction is added to the list of transactions
+                        # the most recent transaction is outputted to the text area to confirm the purchase was successful
+        except stock.InvalidTicker:
+            self.messageBox(title="Error", message="You have entered an invalid ticker!")
+        except stock.MarketClosed:
+            self.messageBox(title="Error", message="The stock market was closed!")
+        except portfolio.InsufficientShares:
+            self.messageBox(title="Error", message="You do not have enough shares to sell the desired quantity!")
+        finally:
+            # all the entry fields are reset to their original state
+            self.ResetFields()
 
     def ValidQuantity(self):
         """
@@ -183,8 +178,7 @@ class Backtester(EasyFrame):
         return acceptableDate
     
     def CaclulatePortfolio(self):
-        todayDateObject = datetime.now()
-        self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePresentValue() :,.2f}"
+        self.portfolioLabel["text"] = f"Portfolio Value: ${self.myPortfolio.CalculatePortfolioValue(date=None) :,.2f}"
         print(self.myPortfolio._stocks)
         print(self.myPortfolio._cash)
     

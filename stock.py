@@ -41,8 +41,7 @@ class MarketClosed(Exception):
     "Raised when the stock market is closed"
     pass
 
-testStock = Stock("MGK")
-print(testStock.GetClosingPrice('2016-12-25'))
+
     
 
     

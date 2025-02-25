@@ -33,25 +33,6 @@ class Portfolio:
         else:
             self._stocks[ticker] = quantity
 
-    def AbleToSell(self, quantity, ticker):
-
-        """
-        Checks to see if the user can sell the stock
-
-        Arguments:
-        quantity: the number of shares purchased
-        ticker: the stock ticker
-
-        Returns:
-        ableToSell: a Boolean value determining whether or not the user can sell the stock
-        """
-                
-        ableToSell = False
-        if ticker in self._stocks:
-            if self._stocks[ticker] >= quantity:
-                ableToSell = True
-        return ableToSell
-
     def SellStock(self, quantity, price, ticker):
 
         """
@@ -65,32 +46,33 @@ class Portfolio:
         N/A
         
         """
+        if ticker not in self._stocks:
+            raise InsufficientShares
+        elif quantity > self._stocks[ticker]:
+            raise InsufficientShares
+        else:
+            self._stocks[ticker] = self._stocks[ticker] - quantity
+            totalProceeds = quantity * price        
+            self._cash = self._cash + totalProceeds
 
-        self._stocks[ticker] = self._stocks[ticker] - quantity
-        totalProceeds = quantity * price        
-        self._cash = self._cash + totalProceeds
-
-    def CalculatePortfolioValue(self, date):
+    def CalculatePortfolioValue(self, date=None):
         portfolioValue = 0
         portfolioValue = portfolioValue + self._cash
         for ticker in self._stocks:
             quantity = self._stocks[ticker]
             stock = Stock(ticker)
-            portfolioValue = portfolioValue + (quantity*stock.GetClosingPrice(date=date))
+            if date is None:
+                portfolioValue = portfolioValue + (quantity*stock.GetQuote())
+            else:
+                portfolioValue = portfolioValue + (quantity*stock.GetClosingPrice(date=date))
         return portfolioValue
-    
-    def CalculatePresentValue(self):
-        portfolioValue = 0
-        portfolioValue = portfolioValue + self._cash
-        for ticker in self._stocks:
-            quantity = self._stocks[ticker]
-            stock = Stock(ticker)
-            portfolioValue = portfolioValue + (quantity*stock.GetQuote())
-        return portfolioValue
-
     
 class InsufficientFunds(Exception):
     """Raises an exception for insufficient funds"""
+    pass
+
+class InsufficientShares(Exception):
+    """Raises an exception for insuffiient shares"""
     pass
 
 
