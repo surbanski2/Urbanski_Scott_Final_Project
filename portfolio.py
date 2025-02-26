@@ -1,3 +1,17 @@
+"""
+Author: Scott Urbanski
+File: portfolio.py
+Date Modified: 2025-02-25
+Description: This module contains the class
+             definition for an investing portfolio
+             as well as InsufficientFunds and 
+             InsufficientShares exceptions.
+"""
+
+
+
+
+
 from stock import Stock
 
 

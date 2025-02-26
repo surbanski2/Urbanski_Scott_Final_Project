@@ -1,3 +1,13 @@
+"""
+Author: Scott Urbanski
+File: transaction.py
+Date Modified: 2025-02-25
+Description: This module contains the class
+             definition for a stock transaction.
+"""
+
+
+
 class Transaction:
 
     def __init__(self, bought, quantity, ticker, price, date):

@@ -1,3 +1,15 @@
+"""
+Author: Scott Urbanski
+File: stock.py
+Date Modified: 2025-02-25
+Description: This module contains the class
+             definition for a stock
+             as well as exceptions for 
+             an InvalidTicker and MarketClosed.
+"""
+
+
+
 import yfinance
 
 class Stock:
