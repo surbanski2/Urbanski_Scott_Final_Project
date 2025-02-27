@@ -18,21 +18,58 @@ class Stock:
         self._ticker = ticker
         
     def GetOpeningPrice(self, date):
+        """
+        Gets the opening price of a stock on a specific date
+
+        Arguments:
+        date: a String value of the desired date
+
+        Returns:
+        openingPrice: a Float64 value representing the opening price on the desired date
+        """
+
+        # using the LookupQuote function to load in stock market data beginning with the desired date
+        # if the user happened to enter an invalid ticker, the LookupQuote function would raise an InvalidTicker error
         data = self.LookupQuote(date=date)
+        # the first index of the loaded dataframe is assigned to the firstDate variable
         firstDate = data.index[0]
+        # formatting the firstDate variable to a string format of yyyy-mm-dd
         firstDateString = firstDate.strftime('%Y-%m-%d')
+        # comparing the first date of the loaded dataframe with the date parameter
+        # if they are not equivalent that means that the LookupQuote function had no data available for the user's date and moved
+        # to the next available trading day; hence a MarketClosed error is raised
         if firstDateString != date:
             raise MarketClosed
-        return data.iloc[0]["Open"]
+        # otherwise, the cell from the first row of the Open column is stored into openingPrice and returned
+        openingPrice = data.iloc[0]["Open"]
+        return openingPrice
     
     def GetClosingPrice(self, date):
+        """
+        Gets the closing price of a stock on a specific date
+
+        Arguments:
+        date: a String value of the desired date
+
+        Returns:
+        closingPrice: a Float64 value representing the closing price on the desired date
+        """
+
+        # using the LookupQuote function to load in stock market data beginning with the desired date
+        # if the user happened to enter an invalid ticker, the LookupQuote function would raise an InvalidTicker error
         data = self.LookupQuote(date=date)
-        print(data)
+        # the first index of the loaded dataframe is assigned to the firstDate variable
         firstDate = data.index[0]
+        # formatting the firstDate variable to a string format of yyyy-mm-dd
         firstDateString = firstDate.strftime('%Y-%m-%d')
+        # comparing the first date of the loaded dataframe with the date parameter
+        # if they are not equivalent that means that the LookupQuote function had no data available for the user's date and moved
+        # to the next available trading day; hence a MarketClosed error is raised
         if firstDateString != date:
             raise MarketClosed
-        return data.iloc[0]["Close"]
+        # otherwise, the cell from the first row of the Close column is stored into closingPrice and returned
+        closingPrice = data.iloc[0]["Close"]
+        return closingPrice
     
     def GetQuote(self):
         data = self.LookupQuote()
@@ -55,8 +92,8 @@ class MarketClosed(Exception):
     pass
 
 
-myStockTest = Stock("MGK")
-print(myStockTest.GetClosingPrice("2022-02-02"))
+
+
 
     
 

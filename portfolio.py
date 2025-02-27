@@ -8,12 +8,7 @@ Description: This module contains the class
              InsufficientShares exceptions.
 """
 
-
-
-
-
 from stock import Stock
-
 
 class Portfolio:
 

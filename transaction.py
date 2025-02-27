@@ -18,9 +18,21 @@ class Transaction:
         self._date = date
 
     def OutputString(self):
+        """
+        Creates a string description of a stock transaction
+
+        Arguments:
+        N/A
+
+        Returns:
+        outputString: a String value describing the stock transaction 
+        """
+
         outputString = ""
+        # if the bought property is True, the user bought stock so "Bought" is used for the string
         if self._bought == True:
             outputString = f"Bought {self._quantity} shares of {self._ticker} at a price of ${self._price} on {self._date}."
+        # otherwise the bought property is False, so the user sold stock so "Sold" is used for the string
         else:
             outputString = f"Sold {self._quantity} shares of {self._ticker} at a price of ${self._price} on {self._date}."
         return outputString
