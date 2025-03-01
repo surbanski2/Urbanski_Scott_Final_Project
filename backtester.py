@@ -19,6 +19,7 @@ import stock
 from dateutil import parser
 from datetime import datetime
 import pygal
+import copy
 
 class Backtester(EasyFrame):
     """Displays a GUI for entering stock transactions and calculating and displaying results."""
@@ -250,15 +251,19 @@ class Backtester(EasyFrame):
         N/A
         """
 
-
-
-
-        views = self.myPortfolioSnapshots
+        views = copy.deepcopy(self.myPortfolioSnapshots)
         views.append((datetime.now(), self.myPortfolio.CalculatePortfolioValue(date=None)))
         chart = pygal.Line()
-        chart.x_labels = map(lambda d: d.strftime('%Y-%m-%d'), list(zip(*views))[0])
-        chart.add('Portfolio Value', list(zip(*views))[1])
+        dates = []
+        values = []
+        for items in views:
+            dates.append(items[0].strftime('%Y-%m-%d'))
+            values.append(items[1])
+        chart.x_labels = dates
+        chart.add('Portfolio Value', values)
         chart.render_in_browser()
+
+        print(self.myPortfolioSnapshots)
 
 
 
@@ -291,3 +296,4 @@ def main():
 if __name__ == "__main__":
     # checks to see if the script's __name__ variable is main (ie not an imported module) and runs the main() function
     main()
+
