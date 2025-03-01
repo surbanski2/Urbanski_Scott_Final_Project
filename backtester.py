@@ -1,7 +1,7 @@
 """
 Author: Scott Urbanski
 File: backtester.py
-Date Modified: 2025-02-23
+Date Modified: 2025-02-28
 Description: This GUI application allows the user to enter
              a stock ticker, a quantity, and a date. The
              user can then choose to either buy or sell 
@@ -21,7 +21,7 @@ from datetime import datetime
 import pygal
 
 class Backtester(EasyFrame):
-    """Displays a greeting in a window."""
+    """Displays a GUI for entering stock transactions and calculating and displaying results."""
 
     def __init__(self):
         """Sets up the window and the components."""
@@ -60,17 +60,26 @@ class Backtester(EasyFrame):
         userStock = stock.Stock(self.tickerInput.getText())
 
         try:
+            # if the user has entered an invalid quantity, an error message is produced
             if self.ValidQuantity() == False:
+            # if the user has entered a non-date in the date field, an error message is produced
                 self.messageBox(title="Error", message="Quantity of shares must be positive!")
+            # if the user has entered a non-date in the date field, an error message is produced
             elif self.ValidDate() == False:
                 self.messageBox(title="Error", message="You have entered an invalid date!")
+            # if the user has entered a date that is either in the future or prior to the most recent transaction, an error message is produced
             elif self.AcceptableDate() == False:
                 self.messageBox(title="Error", message="You must enter a date between the ranges.")
             else:
+                # the stock is added to the portfolio and cash is removed
                 self.myPortfolio.PurchaseStock(float(self.quantityInput.getText()), userStock.GetOpeningPrice(self.dateInput.getText()), userStock._ticker)
+                # a transaction is added to the list of transactions
                 self.myTransactions.append(Transaction(True, float(self.quantityInput.getText()), userStock._ticker,userStock.GetOpeningPrice(self.dateInput.getText()), self.dateInput.getText()))
+                # the latest transaction's documentation is added to the text area for the user to see
                 self.transactionList.appendText(self.myTransactions[-1].OutputString() + "\n")
+                # the date of the transaction and portfolio value at that date are added as a tuple to the snapshots for viewing as a chart
                 self.myPortfolioSnapshots.append((parser.parse(self.dateInput.getText()),self.myPortfolio.CalculatePortfolioValue(date=self.dateInput.getText())))
+                # the date of the most recent transaction is updated to ensure transactions are added chronologically
                 self.currentDate = self.dateInput.getText()
 
         # if the user has entered a ticker that does not exist, the InvalidTicker exception will be raised and an error message shown
@@ -257,4 +266,5 @@ def main():
     Backtester().mainloop()
 
 if __name__ == "__main__":
+    # checks to see if the script's __name__ variable is main (ie not an imported module) and runs the main() function
     main()
