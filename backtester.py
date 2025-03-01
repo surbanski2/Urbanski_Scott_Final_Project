@@ -251,43 +251,25 @@ class Backtester(EasyFrame):
         N/A
         """
 
+        # creating a copy of the snapshots to work with
         views = copy.deepcopy(self.myPortfolioSnapshots)
+        # adding the current portfolio value to the copied version
         views.append((datetime.now(), self.myPortfolio.CalculatePortfolioValue(date=None)))
+        # creating a line chart
         chart = pygal.Line()
+        # creating empty lists for the dates and values
         dates = []
         values = []
+        # going through each tuple within the snapshots and unpacking to respective lits 
         for items in views:
             dates.append(items[0].strftime('%Y-%m-%d'))
             values.append(items[1])
+        # assigning the dates list to the labels
         chart.x_labels = dates
+        # adding the values to the line chart
         chart.add('Portfolio Value', values)
+        # rendering the chart in the browser
         chart.render_in_browser()
-
-        print(self.myPortfolioSnapshots)
-
-
-
-
-
-
-
-
-
-        """
-
-
-        # points to the list of snapshots
-        views = self.myPortfolioSnapshots
-        # adds another snapshot of the present day value
-        views.append((datetime.now(), self.myPortfolio.CalculatePortfolioValue(date=None)))
-        # creates the line chart
-        chart = pygal.DateLine()
-        # uses a comprehension to add the tuples from views to the chart
-        chart.add('Portfolio Value', [view for view in views])
-        # renders the chart in the browser
-        chart.render_in_browser()
-
-        """
 
 def main():
     """Instantiates and pops up the window."""
