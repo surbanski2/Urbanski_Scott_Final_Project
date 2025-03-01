@@ -250,6 +250,27 @@ class Backtester(EasyFrame):
         N/A
         """
 
+        views = self.myPortfolioSnapshots
+        views.append((datetime.now(), self.myPortfolio.CalculatePortfolioValue(date=None)))
+        chart = pygal.Line()
+        chart.x_labels = map(lambda d: d.strftime('%Y-%m-%d'), list(zip(*views))[0])
+        chart.add('Portfolio Value', list(zip(*views))[1])
+        chart.render_in_browser()
+
+
+
+
+
+
+
+
+
+
+
+
+        """
+
+
         # points to the list of snapshots
         views = self.myPortfolioSnapshots
         # adds another snapshot of the present day value
@@ -260,6 +281,8 @@ class Backtester(EasyFrame):
         chart.add('Portfolio Value', [view for view in views])
         # renders the chart in the browser
         chart.render_in_browser()
+
+        """
 
 def main():
     """Instantiates and pops up the window."""
