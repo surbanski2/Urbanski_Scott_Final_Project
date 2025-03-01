@@ -4,3 +4,4 @@ Lambert, K. A., & Osborne, M. (2019). Fundamentals of Python: First Programs. Co
 
 Python Programming For Beginners. (2023, March 5). Python Tutorial #39 - Custom Exceptions in Python Programming. YouTube.com. https://www.youtube.com/watch?v=-Xvkpm7t3bk
 
+No Author. (2012). How do I define a function with optional arguments?. Stack Overflow. https://stackoverflow.com/questions/9539921/how-do-i-define-a-function-with-optional-arguments 
